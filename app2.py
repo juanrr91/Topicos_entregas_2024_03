@@ -1,30 +1,31 @@
 import pandas as pd
 import joblib
-#import pickle as pk
 import streamlit as st
 import ssl
 from sklearn.preprocessing import OrdinalEncoder
 
-model = joblib.load('model_rf.pkl')
+model = joblib.load('model_xgb.pkl')
 
 ordinal_encoder = joblib.load('ordinal_encoder.pkl')
 
+
+
 #model = pk.load(open('model.pkl', 'rb'))
 
-st.header('Car Prediction ML Model')
+st.header('Modelo de prediccion de Carros')
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
 data = pd.read_csv('https://github.com/sergiomora03/AdvancedTopicsAnalytics/raw/main/datasets/dataTrain_carListings.zip')
 
-año= str(st.slider('Select a car Year', 1990, 2024))
-Kilometraje = st.slider('Select a car Mileage', 0, 300000)
-marca = st.selectbox('Select a car Make', data['Make'].unique())
-estado = st.selectbox('Select a car State', data['State'].unique())
+año= str(st.slider('Seleccione Año de Fabricación', 1990, 2024))
+Kilometraje = st.slider('Seleccione Kilometraje', 0, 300000, format="%d Km")
+marca = st.selectbox('Seleccionar Marca del carro', data['Make'].unique())
+estado = st.selectbox('Seleccionar Estado', data['State'].unique())
 #modelo = st.selectbox('Select a car Model', data['Model'].unique())
 
 modelos_filtrados = data[data['Make'] == marca]['Model'].unique()
-modelo = st.selectbox('Select a car Model', modelos_filtrados)
+modelo = st.selectbox('Seleccionar Modelo de carro', modelos_filtrados)
 
 if st.button("Predict"):
     # Crear el DataFrame de predicción
